@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: <app-name>-deployment
+  labels:
+    app: <app-name>
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: <app-name>
+  template:
+    metadata:
+      labels:
+        app: <app-name>
+    spec:
+      containers:
+        - name: <app-name>
+          image: <dockerhub-repository>:latest
+          ports:
+            - containerPort: <port-of-container>
+          env:
+            - name: <name-of-.env-key>
+              valueFrom:
+                configMapKeyRef:
+                  name: <app-name>-config
+                  key: <key-of-configMap-parameter>
+            - name: HUE_BRIDGE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: <app-name>-secret
+                  key: <key-of-secret-parameter>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <app-name>-service
+spec:
+  type: NodePort
+  selector:
+    app: <app-name>
+  ports:
+    - protocol: TCP
+      port: <port-of-service>
+      targetPort: <port-of-container>
+      nodePort: <port-of-node>

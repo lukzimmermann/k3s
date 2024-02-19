@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-server-deployment
+  namespace: home-automation
+  labels:
+    app: home-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-server
+  template:
+    metadata:
+      labels:
+        app: home-server
+    spec:
+      containers:
+        - name: home-server
+          image: lukzimmermann/homeserver:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: HUE_BRIDGE_IP
+              valueFrom:
+                configMapKeyRef:
+                  name: home-automation-config
+                  key: HUE_BRIDGE_IP
+            - name: HUE_BRIDGE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: home-automation-secret
+                  key: HUE_BRIDGE_USER
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-server-service
+  namespace: home-automation
+spec:
+  type: NodePort
+  selector:
+    app: home-server
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30100

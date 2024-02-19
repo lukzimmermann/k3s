@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-dashboard-deployment
+  namespace: home-automation
+  labels:
+    app: home-dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: home-dashboard
+  template:
+    metadata:
+      labels:
+        app: home-dashboard
+    spec:
+      containers:
+        - name: home-dashboard
+          image: lukzimmermann/homedashboard:latest
+          ports:
+            - containerPort: 5173
+          env:
+            - name: VITE_BACKEND_BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: home-automation-config
+                  key: VITE_BACKEND_BASE_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: home-dashboard-service
+  namespace: home-automation
+spec:
+  type: NodePort
+  selector:
+    app: home-dashboard
+  ports:
+    - protocol: TCP
+      port: 5173
+      targetPort: 5173
+      nodePort: 30101
