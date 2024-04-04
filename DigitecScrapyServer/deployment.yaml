@@ -31,14 +31,24 @@ spec:
                 configMapKeyRef:
                   name: digitec-scrapy-server-config
                   key: SCRAP_INTERVAL
+            - name: BASELINE_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: digitec-scrapy-server-config
+                  key: BASELINE_PATH
             - name: DATA_PATH
               valueFrom:
                 configMapKeyRef:
                   name: digitec-scrapy-server-config
                   key: DATA_PATH
-            volumeMounts:
-              - name: nfs-volume
-                mountPath: /mnt/data
+            - name: CONFIG_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: digitec-scrapy-server-config
+                  key: CONFIG_PATH
+          volumeMounts:
+            - name: nfs-volume
+              mountPath: /app/data
       volumes:
         - name: nfs-volume
           persistentVolumeClaim:

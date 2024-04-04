@@ -4,8 +4,10 @@ metadata:
   name: digitec-scrapy-server-pv
   namespace: digitec-scrapy-server
 spec:
+  storageClassName: ''
   accessModes:
     - ReadWriteMany
+  volumeMode: Filesystem
   resources:
     requests:
       storage: 1000Gi

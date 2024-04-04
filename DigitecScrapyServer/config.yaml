@@ -4,6 +4,8 @@ metadata:
   name: digitec-scrapy-server-config
   namespace: digitec-scrapy-server
 data:
-  CLEAN_JOB_INTERVAL: '5'
+  CLEAN_JOB_INTERVAL: '7200'
   SCRAP_INTERVAL: '0.1'
-  DATA_PATH: '/mnt/data'
+  BASELINE_PATH: '/app/data/baseline'
+  DATA_PATH: '/app/data/data'
+  CONFIG_PATH: '/app/data'

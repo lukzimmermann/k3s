@@ -4,10 +4,16 @@ metadata:
   name: digitec-scrapy-server-pv
   namespace: digitec-scrapy-server # Adding the namespace here
 spec:
+  storageClassName: ''
   capacity:
     storage: 1000Gi
   accessModes:
     - ReadWriteMany
+  persistentVolumeReclaimPolicy:
+  mountOptions:
+    - hard
+    - nfsvers=4.1
   nfs:
     path: /mnt/user/digitecScrapyData
     server: 10.0.20.10
+    readOnly: false
