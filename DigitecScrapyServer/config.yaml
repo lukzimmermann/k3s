@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: digitec-scrapy-server-config
+  namespace: digitec-scrapy-server
+data:
+  CLEAN_JOB_INTERVAL: '5'
+  SCRAP_INTERVAL: '0.1'
+  DATA_PATH: '/mnt/data'

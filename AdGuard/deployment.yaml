@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: adguard-deployment
+  namespace: adguard
+  labels:
+    app: adguard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: adguard
+  template:
+    metadata:
+      labels:
+        app: adguard
+    spec:
+      containers:
+        - name: adguard
+          image: adguard/adguardhome:v0.107.45
+          ports:
+            - containerPort: 53
+            - containerPort: 80
+            - containerPort: 433
+            - containerPort: 3000
+          volumeMounts:
+            - name: adguard-data
+              mountPath: /opt/adguardhome
+      volumes:
+        - name: adguard-data
+          persistentVolumeClaim:
+            claimName: adguard-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: adguard-service
+  namespace: adguard
+spec:
+  type: NodePort
+  selector:
+    app: adguard
+  ports:
+    - name: dns
+      port: 30053
+      targetPort: 53
+      nodePort: 53
+    - name: http
+      port: 30080
+      targetPort: 80
+      nodePort: 80
+    - name: https
+      port: 300443
+      targetPort: 433
+      nodePort: 433
+    - name: web-ui
+      port: 303000
+      targetPort: 3000
+      nodePort: 3000
