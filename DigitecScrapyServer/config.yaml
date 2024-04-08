@@ -5,7 +5,11 @@ metadata:
   namespace: digitec-scrapy-server
 data:
   CLEAN_JOB_INTERVAL: '7200'
+  ZIP_JOB_INTERVAL: '14400'
+  ZIP_SIZE: '100000'
   SCRAP_INTERVAL: '0.1'
+  BATCH_SIZE: '1000'
   BASELINE_PATH: '/app/data/baseline'
+  BASELINE_ZIP_PATH: '/app/data/baseline_zip/'
   DATA_PATH: '/app/data/data'
   CONFIG_PATH: '/app/data'
