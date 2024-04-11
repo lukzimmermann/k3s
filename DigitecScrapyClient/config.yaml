@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: digitec-scrapy-client-config
+  namespace: digitec-scrapy
+data:
+  DISPLAY_NAME: 'zimmelu5'
+  TOKEN: '721e96d9a398ae65e62c01c84b3c289852e8058b5f449ac6656570165606dc5f'
+  SERVER_URL: 'https://www.dmining.ch'

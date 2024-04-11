@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: digitec-scrapy-client-deployment
+  namespace: digitec-scrapy
+  labels:
+    app: digitec-scrapy-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: digitec-scrapy-client
+  template:
+    metadata:
+      labels:
+        app: digitec-scrapy-client
+    spec:
+      containers:
+        - name: digitec-scrapy-client
+          image: lukzimmermann/digitec_scrapy_client:latest
+          env:
+            - name: TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: digitec-scrapy-client-config
+                  key: TOKEN
+            - name: SERVER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: digitec-scrapy-client-config
+                  key: SERVER_URL
