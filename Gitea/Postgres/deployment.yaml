@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitea-db
+  namespace: gitea
+  labels:
+    app: gitea-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gitea-db
+  template:
+    metadata:
+      labels:
+        app: gitea-db
+    spec:
+      containers:
+        - name: gitea-db
+          image: postgres:14
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: "gitea"
+            - name: TZ
+              value: Europe/Zurich
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: POSTGRES_USER
+              value: "gitea"
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: GITEA__database__PASSWD
+                  name: gitea-db-secret
+          volumeMounts:
+            - name: gitea-db-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: gitea-db-data
+          persistentVolumeClaim:
+            claimName: gitea-db-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitea-db-service
+  namespace: gitea
+spec:
+  selector:
+    app: gitea-db
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
